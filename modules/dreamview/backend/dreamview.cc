@@ -96,6 +96,11 @@ Status Dreamview::Init() {
   server_->addWebSocketHandler("/pointcloud", *point_cloud_ws_);
   server_->addWebSocketHandler("/camera", *camera_ws_);
   server_->addHandler("/image", *image_);
+
+  // For instrumentation
+  instrumentation_ws_.reset(new WebSocketHandler("Instrumentation"));
+  server_->addWebSocketHandler("/instrumentation", *instrumentation_ws_);
+
 #if WITH_TELEOP == 1
   teleop_ws_.reset(new WebSocketHandler("Teleop"));
   teleop_.reset(new TeleopService(teleop_ws_.get()));

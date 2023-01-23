@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package apollo.dreamview;
+
+import "modules/planning/proto/planning.proto";
+import "modules/perception/proto/traffic_light_detection.proto";
+import "modules/prediction/proto/prediction_obstacle.proto";
+
+// Next-id: 13
+message Instrumentation {
+  // Timestamp in milliseconds
+  optional double timestamp = 1;
+
+  // Sequence number
+  optional uint32 sequence_num = 2;
+
+  optional apollo.perception.TrafficLightDetection traffic_light_detection = 3;
+
+  optional apollo.prediction.PredictionObstacles prediction_obstacles = 4;
+
+  optional apollo.planning.ADCTrajectory trajectory = 5;
+}

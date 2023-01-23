@@ -67,6 +67,8 @@ class Dreamview {
   std::unique_ptr<MapService> map_service_;
   std::unique_ptr<HMI> hmi_;
   std::unique_ptr<PerceptionCameraUpdater> perception_camera_updater_;
+  // For instrumentation
+  std::unique_ptr<WebSocketHandler> instrumentation_ws_;
 #if WITH_TELEOP == 1
   std::unique_ptr<TeleopService> teleop_;
   std::unique_ptr<WebSocketHandler> teleop_ws_;

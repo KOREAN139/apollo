@@ -201,3 +201,31 @@ py_proto_library(
         ":preprocess_table_proto",
     ],
 )
+
+cc_proto_library(
+    name = "instrumentation_cc_proto",
+    deps = [
+        ":instrumentation_proto",
+    ],
+)
+
+proto_library(
+    name = "instrumentation_proto",
+    srcs = ["instrumentation.proto"],
+    deps = [
+        "//modules/planning/proto:planning_proto",
+        "//modules/perception/proto:traffic_light_detection_proto",
+        "//modules/prediction/proto:prediction_obstacle_proto",
+    ],
+)
+
+py_proto_library(
+    name = "instrumentation_py_pb2",
+    deps = [
+        ":instrumentation_proto",
+        "//modules/planning/proto:planning_py_pb2",
+        "//modules/perception/proto:traffic_light_detection_py_pb2",
+        "//modules/prediction/proto:prediction_obstacle_py_pb2",
+    ],
+)
+
