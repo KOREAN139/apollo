@@ -23,6 +23,7 @@ cc_library(
         "//modules/dreamview/backend/point_cloud:point_cloud_updater",
         "//modules/dreamview/backend/sim_control",
         "//modules/dreamview/backend/simulation_world:simulation_world_updater",
+        "//modules/dreamview/backend/instrumentation:instrumentation_service",
         "//modules/dreamview/proto:simulation_world_cc_proto",
         "//modules/map/hdmap:hdmap_util",
         "//modules/map/pnc_map",

@@ -100,6 +100,8 @@ Status Dreamview::Init() {
   // For instrumentation
   instrumentation_ws_.reset(new WebSocketHandler("Instrumentation"));
   server_->addWebSocketHandler("/instrumentation", *instrumentation_ws_);
+  instrumentation_service_.reset(new InstrumentationService(
+                          instrumentation_ws_.get()));
 
 #if WITH_TELEOP == 1
   teleop_ws_.reset(new WebSocketHandler("Teleop"));
