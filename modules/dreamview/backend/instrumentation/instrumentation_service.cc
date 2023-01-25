@@ -65,15 +65,6 @@ void InstrumentationService::InitReaders()
 
 void InstrumentationService::RegisterMessageHandlers()
 {
-        instrumentation_ws_->RegisterConnectionReadyHandler(
-                [this](WebSocketHandler::Connection* conn) {
-                        const auto instrumentation_json =
-                                JsonUtil::ProtoToTypedJson(
-                                                "Instrumentation",
-                                                instrumentation_);
-                        instrumentation_ws_->SendData(conn, "Connected");
-                });
-
         instrumentation_ws_->RegisterMessageHandler(
                 "RequestInstrumentationData",
                 [this](const Json &json, WebSocketHandler::Connection *conn) {
