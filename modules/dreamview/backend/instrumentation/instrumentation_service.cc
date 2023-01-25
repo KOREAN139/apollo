@@ -78,18 +78,18 @@ void InstrumentationService::RegisterMessageHandlers()
                 "RequestInstrumentationData",
                 [this](const Json &json, WebSocketHandler::Connection *conn) {
                         Update();
-                        // const auto instrumentation_json =
-                        //         JsonUtil::ProtoToTypedJson(
-                        //                         "Instrumentation",
-                        //                         instrumentation_);
-                        // instrumentation_ws_->SendData(
-                        //                 conn, instrumentation_json.dump());
-
-                        size_t size = instrumentation_.ByteSizeLong();
-                        void *data = malloc(size);
-                        instrumentation_.SerializeToArray(data, size);
-                        instrumentation_ws_->SendBinaryData(
-                                        conn, (const std::string &) data);
+                        const auto instrumentation_json =
+                                JsonUtil::ProtoToTypedJson(
+                                                "Instrumentation",
+                                                instrumentation_);
+                        instrumentation_ws_->SendData(
+                                        conn, instrumentation_json.dump());
+                        //
+                        // size_t size = instrumentation_.ByteSizeLong();
+                        // void *data = malloc(size);
+                        // instrumentation_.SerializeToArray(data, size);
+                        // instrumentation_ws_->SendBinaryData(
+                        //                 conn, (const std::string &) data);
                 });
 }
 
