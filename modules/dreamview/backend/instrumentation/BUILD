@@ -14,6 +14,7 @@ cc_library(
         "//cyber",
         "//modules/common/adapters:adapter_gflags",
         "//modules/common/util",
+        "//modules/common/util:json_util",
         "//modules/dreamview/proto:instrumentation_cc_proto",
         "//modules/dreamview/backend/common:dreamview_gflags",
         "//modules/dreamview/backend/handlers:websocket_handler",

@@ -62,6 +62,7 @@ class InstrumentationService {
  private:
   void InitReaders();
   void RegisterMessageHandlers();
+  void Update();
 
   /**
    * @brief Update simulation world with incoming data, e.g., chassis,
