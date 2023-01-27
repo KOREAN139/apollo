@@ -18,6 +18,8 @@ cc_library(
         "//modules/dreamview/proto:instrumentation_cc_proto",
         "//modules/dreamview/backend/common:dreamview_gflags",
         "//modules/dreamview/backend/handlers:websocket_handler",
+        "//modules/map/hdmap:hdmap_util",
+        "//modules/map/proto:map_cc_proto",
         "//modules/perception/proto:traffic_light_detection_cc_proto",
         "//modules/planning/proto:planning_cc_proto",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",

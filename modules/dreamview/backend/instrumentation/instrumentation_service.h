@@ -30,9 +30,11 @@
 #include "absl/strings/str_cat.h"
 
 #include "modules/dreamview/proto/instrumentation.pb.h"
+#include "modules/map/proto/map.pb.h"
 
 #include "cyber/common/log.h"
 #include "cyber/cyber.h"
+
 #include "modules/dreamview/backend/handlers/websocket_handler.h"
 
 /**
@@ -63,6 +65,7 @@ class InstrumentationService {
   void InitReaders();
   void RegisterMessageHandlers();
   void Update();
+  apollo::hdmap::Map GetMapData();
 
   /**
    * @brief Update simulation world with incoming data, e.g., chassis,

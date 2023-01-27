@@ -21,19 +21,22 @@
 #include "cyber/common/file.h"
 #include "modules/common/adapters/adapter_gflags.h"
 #include "modules/common/util/json_util.h"
+#include "modules/map/hdmap/hdmap_util.h"
 #include "modules/dreamview/backend/common/dreamview_gflags.h"
 
 namespace apollo {
 namespace dreamview {
 
 using apollo::common::util::JsonUtil;
-using apollo::cyber::common::GetProtoFromASCIIFile;
-using apollo::cyber::common::SetProtoToASCIIFile;
+using apollo::hdmap::HDMapUtil;
+
+using apollo::cyber::common::GetProtoFromBinaryFile;
 
 using Json = nlohmann::json;
 using google::protobuf::util::JsonStringToMessage;
 using google::protobuf::util::MessageToJsonString;
 
+using apollo::hdmap::Map;
 using apollo::perception::TrafficLightDetection;
 using apollo::planning::ADCTrajectory;
 using apollo::prediction::PredictionObstacles;
@@ -82,6 +85,16 @@ void InstrumentationService::RegisterMessageHandlers()
                         // instrumentation_ws_->SendBinaryData(
                         //                 conn, (const std::string &) data);
                 });
+
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestMapData",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        Map hdmap_ = GetMapData();
+                        const auto hdmap_json = JsonUtil::ProtoToTypedJson(
+                                        "HDMap", hdmap_);
+                        instrumentation_ws_->SendData(conn, hdmap_json.dump());
+                });
+
 }
 
 void InstrumentationService::Update()
@@ -91,6 +104,15 @@ void InstrumentationService::Update()
         UpdateWithLatestObserved(perception_traffic_light_reader_.get());
         UpdateWithLatestObserved(prediction_obstacle_reader_.get());
         UpdateWithLatestObserved(planning_reader_.get());
+}
+
+apollo::hdmap::Map InstrumentationService::GetMapData()
+{
+        Map map_proto;
+        std::string sim_map_path = apollo::hdmap::SimMapFile();
+        GetProtoFromBinaryFile(sim_map_path, &map_proto);
+
+        return map_proto;
 }
 
 template<>
