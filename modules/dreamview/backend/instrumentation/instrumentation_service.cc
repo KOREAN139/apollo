@@ -28,7 +28,9 @@ namespace apollo {
 namespace dreamview {
 
 using apollo::common::util::JsonUtil;
+using apollo::common::PointENU;
 using apollo::hdmap::HDMapUtil;
+using apollo::hdmap::LaneInfoConstPtr;
 
 using apollo::cyber::common::GetProtoFromBinaryFile;
 
@@ -95,6 +97,25 @@ void InstrumentationService::RegisterMessageHandlers()
                         instrumentation_ws_->SendData(conn, hdmap_json.dump());
                 });
 
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestNearestLane",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        double x, y;
+                        if (!json.contains("point")) {
+                                AERROR << "Failed to parse point from json";
+                                return;
+                        }
+                        x = json["point"]["x"];
+                        y = json["point"]["y"];
+ 
+                        double s, l;
+                        LaneInfoConstPtr nearest_lane;
+                        GetNearestLane(x, y, &nearest_lane, &s, &l);
+
+                        const auto response_json = JsonUtil::ProtoToTypedJson(
+                                        "Lane", nearest_lane->lane());
+                        instrumentation_ws_->SendData(conn, response_json.dump());
+                });
 }
 
 void InstrumentationService::Update()
@@ -113,6 +134,22 @@ apollo::hdmap::Map InstrumentationService::GetMapData()
         GetProtoFromBinaryFile(sim_map_path, &map_proto);
 
         return map_proto;
+}
+
+bool InstrumentationService::GetNearestLane(const double x, const double y,
+                                LaneInfoConstPtr *nearest_lane,
+                                double *nearest_s, double *nearest_l)
+{
+        boost::shared_lock<boost::shared_mutex> reader_lock(mutex_);
+
+        PointENU point;
+        point.set_x(x);
+        point.set_y(y);
+        const apollo::hdmap::HDMap *hdmap = HDMapUtil::BaseMapPtr();
+        if (hdmap->GetNearestLane(point, nearest_lane, nearest_s, nearest_l) < 0) {
+                return false;
+        }
+        return true;
 }
 
 template<>

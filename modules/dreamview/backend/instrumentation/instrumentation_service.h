@@ -31,6 +31,7 @@
 
 #include "modules/dreamview/proto/instrumentation.pb.h"
 #include "modules/map/proto/map.pb.h"
+#include "modules/map/hdmap/hdmap.h"
 
 #include "cyber/common/log.h"
 #include "cyber/cyber.h"
@@ -66,6 +67,9 @@ class InstrumentationService {
   void RegisterMessageHandlers();
   void Update();
   apollo::hdmap::Map GetMapData();
+  bool GetNearestLane(const double x, const double y,
+                      apollo::hdmap::LaneInfoConstPtr *nearest_lane,
+                      double *nearest_s, double *nearest_l);
 
   /**
    * @brief Update simulation world with incoming data, e.g., chassis,
