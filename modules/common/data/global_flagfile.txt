@@ -18,3 +18,21 @@
 --use_cyber_time=true
 
 --map_dir=/apollo/modules/map/data/san_mateo
+
+--map_dir=/apollo/modules/map/data/borregas_ave
+
+--map_dir=/apollo/modules/map/data/demo
+
+--map_dir=/apollo/modules/map/data/SanFrancisco_correct
+
+--map_dir=/apollo/modules/map/data/SanFrancisco_correct_adjusted
+
+--map_dir=/apollo/modules/map/data/SingleLaneRoad_long
+
+--map_dir=/apollo/modules/map/data/SingleLaneRoad
+
+--map_dir=/apollo/modules/map/data/autonomousstuff
+
+--map_dir=/apollo/modules/map/data/parallelparking
+
+--map_dir=/apollo/modules/map/data/Tartu
