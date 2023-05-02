@@ -32,6 +32,7 @@
 #include "modules/dreamview/proto/instrumentation.pb.h"
 #include "modules/map/proto/map.pb.h"
 #include "modules/map/hdmap/hdmap.h"
+#include "modules/planning/proto/pad_msg.pb.h"
 
 #include "cyber/common/log.h"
 #include "cyber/cyber.h"
@@ -109,6 +110,10 @@ class InstrumentationService {
       prediction_obstacle_reader_;
   std::shared_ptr<cyber::Reader<apollo::planning::ADCTrajectory>>
       planning_reader_;
+
+  // Writers
+  std::shared_ptr<cyber::Writer<apollo::planning::PadMessage>>
+      pad_msg_writer_;
 
   // Mutex to protect concurrent access to simulation_world_json_.
   // NOTE: Use boost until we have std version of rwlock support.

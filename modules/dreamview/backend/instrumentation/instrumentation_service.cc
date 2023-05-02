@@ -41,6 +41,8 @@ using google::protobuf::util::MessageToJsonString;
 using apollo::hdmap::Map;
 using apollo::perception::TrafficLightDetection;
 using apollo::planning::ADCTrajectory;
+using apollo::planning::PadMessage;
+using apollo::planning::DrivingAction;
 using apollo::prediction::PredictionObstacles;
 
 namespace {
@@ -66,6 +68,9 @@ void InstrumentationService::InitReaders()
         planning_reader_ =
                 node_->CreateReader<ADCTrajectory>(
                                 FLAGS_planning_trajectory_topic);
+        pad_msg_writer_ =
+                node_->CreateWriter<PadMessage>(
+                                FLAGS_planning_pad_topic);
 }
 
 void InstrumentationService::RegisterMessageHandlers()
@@ -115,6 +120,30 @@ void InstrumentationService::RegisterMessageHandlers()
                         const auto response_json = JsonUtil::ProtoToTypedJson(
                                         "Lane", nearest_lane->lane());
                         instrumentation_ws_->SendData(conn, response_json.dump());
+                });
+
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestPullOver",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        PadMessage pad_msg;
+                        pad_msg.set_action(DrivingAction::PULL_OVER);
+                        pad_msg_writer_->Write(pad_msg);
+                });
+
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestEmergencyStop",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        PadMessage pad_msg;
+                        pad_msg.set_action(DrivingAction::STOP);
+                        pad_msg_writer_->Write(pad_msg);
+                });
+
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestResumeCruise",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        PadMessage pad_msg;
+                        pad_msg.set_action(DrivingAction::RESUME_CRUISE);
+                        pad_msg_writer_->Write(pad_msg);
                 });
 }
 
