@@ -145,6 +145,8 @@ cc_library(
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
         "//modules/perception/onboard/transform_wrapper",
         "@eigen",
+
+        "//modules/planning/proto:pad_msg_cc_proto",
     ],
 )
 

@@ -27,6 +27,8 @@
 #include "modules/perception/onboard/proto/lidar_component_config.pb.h"
 #include "modules/perception/onboard/transform_wrapper/transform_wrapper.h"
 
+#include "modules/planning/proto/pad_msg.pb.h"
+
 namespace apollo {
 namespace perception {
 namespace onboard {
@@ -57,6 +59,11 @@ class DetectionComponent : public cyber::Component<drivers::PointCloud> {
   TransformWrapper lidar2world_trans_;
   std::unique_ptr<lidar::BaseLidarObstacleDetection> detector_;
   std::shared_ptr<apollo::cyber::Writer<LidarFrameMessage>> writer_;
+
+  // For defense
+  int detection_fail_tick_ = 0;
+  bool emergency_stop_ = false;
+  std::shared_ptr<apollo::cyber::Writer<apollo::planning::PadMessage>> pad_msg_writer_;
 };
 
 CYBER_REGISTER_COMPONENT(DetectionComponent);

@@ -48,6 +48,10 @@ bool DetectionComponent::Init() {
   enable_hdmap_ = comp_config.enable_hdmap();
   writer_ = node_->CreateWriter<LidarFrameMessage>(output_channel_name_);
 
+  pad_msg_writer_ = node_->CreateWriter<apollo::planning::PadMessage>(FLAGS_planning_pad_topic);
+  detection_fail_tick_ = 0;
+  emergency_stop_ = false;
+
   if (!InitAlgorithmPlugin()) {
     AERROR << "Failed to init detection component algorithm plugin.";
     return false;
@@ -66,8 +70,19 @@ bool DetectionComponent::Proc(
 
   bool status = InternalProc(message, out_message);
   if (status) {
+    detection_fail_tick_ = 0;
     writer_->Write(out_message);
     AINFO << "Send lidar detect output message.";
+  } else {
+    detection_fail_tick_ += 1;
+
+    if (detection_fail_tick_ < 5) {
+            apollo::planning::PadMessage pad_msg;
+      pad_msg.set_action(apollo::planning::DrivingAction::STOP);
+      pad_msg_writer_->Write(pad_msg);
+      emergency_stop_ = true;
+      AINFO << "Request planning to emergency stop.";
+    }
   }
   return status;
 }
