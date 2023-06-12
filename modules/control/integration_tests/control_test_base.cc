@@ -122,7 +122,7 @@ bool ControlTestBase::test_control() {
              << FLAGS_test_monitor_file;
       return false;
     }
-    control_.OnMonitor(monitor_message);
+    control_.OnMonitor(std::make_shared<MonitorMessage>(monitor_message));
   }
 
   control_.local_view_.mutable_chassis()->CopyFrom(control_.latest_chassis_);

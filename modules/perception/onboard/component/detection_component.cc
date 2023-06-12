@@ -29,6 +29,9 @@ namespace apollo {
 namespace perception {
 namespace onboard {
 
+DetectionComponent::DetectionComponent()
+    : monitor_logger_buffer_(apollo::common::monitor::MonitorMessageItem::PERCEPTION) {}
+
 std::atomic<uint32_t> DetectionComponent::seq_num_{0};
 
 bool DetectionComponent::Init() {
@@ -48,7 +51,6 @@ bool DetectionComponent::Init() {
   enable_hdmap_ = comp_config.enable_hdmap();
   writer_ = node_->CreateWriter<LidarFrameMessage>(output_channel_name_);
 
-  pad_msg_writer_ = node_->CreateWriter<apollo::planning::PadMessage>(FLAGS_planning_pad_topic);
   detection_fail_tick_ = 0;
   emergency_stop_ = false;
 
@@ -76,10 +78,8 @@ bool DetectionComponent::Proc(
   } else {
     detection_fail_tick_ += 1;
 
-    if (detection_fail_tick_ < 5) {
-            apollo::planning::PadMessage pad_msg;
-      pad_msg.set_action(apollo::planning::DrivingAction::STOP);
-      pad_msg_writer_->Write(pad_msg);
+    if (!emergency_stop_ && detection_fail_tick_ > 3) {
+      monitor_logger_buffer_.FATAL("Lidar detection failed!");
       emergency_stop_ = true;
       AINFO << "Request planning to emergency stop.";
     }

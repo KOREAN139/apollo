@@ -146,7 +146,7 @@ cc_library(
         "//modules/perception/onboard/transform_wrapper",
         "@eigen",
 
-        "//modules/planning/proto:pad_msg_cc_proto",
+        "//modules/common/monitor_log",
     ],
 )
 

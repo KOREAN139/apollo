@@ -28,8 +28,6 @@ DECLARE_bool(obs_benchmark_mode);
 DECLARE_bool(obs_save_fusion_supplement);
 DECLARE_bool(start_visualizer);
 
-DECLARE_string(planning_pad_topic);
-
 }  // namespace onboard
 }  // namespace perception
 }  // namespace apollo

@@ -27,7 +27,7 @@
 #include "modules/perception/onboard/proto/lidar_component_config.pb.h"
 #include "modules/perception/onboard/transform_wrapper/transform_wrapper.h"
 
-#include "modules/planning/proto/pad_msg.pb.h"
+#include "modules/common/monitor_log/monitor_log_buffer.h"
 
 namespace apollo {
 namespace perception {
@@ -35,7 +35,7 @@ namespace onboard {
 
 class DetectionComponent : public cyber::Component<drivers::PointCloud> {
  public:
-  DetectionComponent() = default;
+  explicit DetectionComponent();
   virtual ~DetectionComponent() = default;
 
   bool Init() override;
@@ -63,7 +63,7 @@ class DetectionComponent : public cyber::Component<drivers::PointCloud> {
   // For defense
   int detection_fail_tick_ = 0;
   bool emergency_stop_ = false;
-  std::shared_ptr<apollo::cyber::Writer<apollo::planning::PadMessage>> pad_msg_writer_;
+  common::monitor::MonitorLogBuffer monitor_logger_buffer_;
 };
 
 CYBER_REGISTER_COMPONENT(DetectionComponent);

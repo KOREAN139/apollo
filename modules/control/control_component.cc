@@ -95,6 +95,26 @@ bool ControlComponent::Init() {
       node_->CreateReader<PadMessage>(pad_msg_reader_config, nullptr);
   ACHECK(pad_msg_reader_ != nullptr);
 
+  cyber::ReaderConfig monitor_msg_reader_config;
+  monitor_msg_reader_config.channel_name = FLAGS_monitor_topic;
+  monitor_msg_reader_config.pending_queue_size = 10;
+
+  monitor_msg_reader_ = node_->CreateReader<apollo::common::monitor::MonitorMessage>(
+      monitor_msg_reader_config,
+      [this](const std::shared_ptr<apollo::common::monitor::MonitorMessage> &monitor_message) {
+        for (const auto &item : monitor_message->item()) {
+          AINFO << item.log_level() << ": " << item.msg();
+          if (item.log_level() == common::monitor::MonitorMessageItem::FATAL) {
+            AINFO << "Received fatal message: " << item.msg();
+            monitor_estop_ = true;
+            return;
+          }
+        }
+        // std::unique_lock<std::mutex> lock(monitor_msgs_mutex_);
+        // monitor_msgs_.push_back(monitor_message);
+      });
+  ACHECK(monitor_msg_reader_ != nullptr);
+
   if (!FLAGS_use_control_submodules) {
     control_cmd_writer_ =
         node_->CreateWriter<ControlCommand>(FLAGS_control_command_topic);
@@ -149,9 +169,12 @@ void ControlComponent::OnLocalization(
 }
 
 void ControlComponent::OnMonitor(
-    const common::monitor::MonitorMessage &monitor_message) {
-  for (const auto &item : monitor_message.item()) {
+    const std::shared_ptr<common::monitor::MonitorMessage> &monitor_message) {
+  AINFO << "Received monitor message: run monitor message callback.";
+  for (const auto &item : monitor_message->item()) {
+    AINFO << item.log_level() << ": " << item.msg();
     if (item.log_level() == common::monitor::MonitorMessageItem::FATAL) {
+      AINFO << "Received fatal message: " << item.msg();
       estop_ = true;
       return;
     }
@@ -195,6 +218,8 @@ Status ControlComponent::ProduceControlCommand(
   estop_ = control_conf_.enable_persistent_estop()
                ? estop_ || local_view_.trajectory().estop().is_estop()
                : local_view_.trajectory().estop().is_estop();
+
+  estop_ = monitor_estop_ ? monitor_estop_ : estop_;
 
   if (local_view_.trajectory().estop().is_estop()) {
     estop_ = true;

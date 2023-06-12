@@ -30,6 +30,7 @@
 #include "modules/control/proto/pad_msg.pb.h"
 #include "modules/localization/proto/localization.pb.h"
 #include "modules/planning/proto/planning.pb.h"
+#include "modules/common/monitor_log/proto/monitor_log.pb.h"
 
 #include "modules/common/util/util.h"
 #include "modules/control/common/dependency_injector.h"
@@ -74,7 +75,8 @@ class ControlComponent final : public apollo::cyber::TimerComponent {
 
   // Upon receiving monitor message
   void OnMonitor(
-      const apollo::common::monitor::MonitorMessage &monitor_message);
+      const std::shared_ptr<apollo::common::monitor::MonitorMessage>
+          &monitor_message);
 
   common::Status ProduceControlCommand(ControlCommand *control_command);
   common::Status CheckInput(LocalView *local_view);
@@ -111,6 +113,7 @@ class ControlComponent final : public apollo::cyber::TimerComponent {
       localization_reader_;
   std::shared_ptr<cyber::Reader<apollo::planning::ADCTrajectory>>
       trajectory_reader_;
+  std::shared_ptr<cyber::Reader<apollo::common::monitor::MonitorMessage>> monitor_msg_reader_;
 
   std::shared_ptr<cyber::Writer<ControlCommand>> control_cmd_writer_;
   // when using control submodules
@@ -121,6 +124,9 @@ class ControlComponent final : public apollo::cyber::TimerComponent {
   LocalView local_view_;
 
   std::shared_ptr<DependencyInjector> injector_;
+
+  // for defense
+  bool monitor_estop_ = false;
 };
 
 CYBER_REGISTER_COMPONENT(ControlComponent)

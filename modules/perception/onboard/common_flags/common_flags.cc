@@ -30,8 +30,6 @@ DEFINE_bool(obs_save_fusion_supplement, false,
             "whether save fusion supplement data, default false");
 DEFINE_bool(start_visualizer, false, "Whether to start visualizer");
 
-DEFINE_string(planning_pad_topic, "/apollo/planning/pad",
-              "planning pad topic name");
 }  // namespace onboard
 }  // namespace perception
 }  // namespace apollo
