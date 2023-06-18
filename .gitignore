@@ -1,6 +1,8 @@
 # Bazel
 bazel-*
 
+*.yaml
+
 # Temporary files
 *.pyc
 *.swp
