@@ -207,7 +207,7 @@ HMIMode HMIWorker::LoadMode(const std::string& mode_config_path) {
 
     // Construct stop_command: pkill -f '<dag[0]>'
     const std::string& first_dag = cyber_module.dag_files(0);
-    module.set_stop_command(absl::StrCat("pkill -f \"", first_dag, "\""));
+    module.set_stop_command(absl::StrCat("pkill -SIGINT -f \"", first_dag, "\""));
     // Construct process_monitor_config.
     module.mutable_process_monitor_config()->add_command_keywords("mainboard");
     module.mutable_process_monitor_config()->add_command_keywords(first_dag);
