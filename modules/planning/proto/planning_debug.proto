@@ -1,0 +1,7 @@
+syntax = "proto2";
+
+package apollo.planning;
+
+message PlanningDebugMessage {
+  repeated string reference_lines_string = 1;
+}

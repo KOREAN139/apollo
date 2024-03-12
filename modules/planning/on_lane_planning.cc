@@ -43,6 +43,7 @@
 #include "modules/planning/tasks/task_factory.h"
 #include "modules/planning/traffic_rules/traffic_decider.h"
 #include "modules/routing/proto/routing.pb.h"
+#include "modules/planning/proto/planning_debug.pb.h"
 
 namespace apollo {
 namespace planning {
@@ -320,6 +321,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   }
 
   if (util::IsDifferentRouting(last_routing_, *local_view_.routing)) {
+    ADEBUG << "seq num: " << last_routing_.header().sequence_num(), local_view_.routing->header().sequence_num();
     last_routing_ = *local_view_.routing;
     ADEBUG << "last_routing_:" << last_routing_.ShortDebugString();
     injector_->history()->Clear();
@@ -482,6 +484,31 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   }*/
   const uint32_t n = frame_->SequenceNum();
   injector_->frame_history()->Add(n, std::move(frame_));
+}
+
+/*
+void OnLanePlanning::GetDebugMsg(PlanningDebugMessage* const planning_debug_msg) {
+  std::list<ReferenceLine> reference_lines;
+  std::list<hdmap::RouteSegments> segments;
+  if (reference_line_provider_->GetReferenceLines(&reference_lines,
+                                                   &segments)) {
+    for (auto& ref_line : reference_lines) {
+      planning_debug_msg->add_reference_lines_string(ref_line.CustomDebugString());
+    }
+  }
+}
+*/
+std::string OnLanePlanning::GetDebugMsg() {
+  std::list<ReferenceLine> reference_lines;
+  std::list<hdmap::RouteSegments> segments;
+  if (reference_line_provider_->GetReferenceLines(&reference_lines,
+                                                   &segments)) {
+    if (!reference_lines.empty()) {
+      return reference_lines.front().CustomDebugString();
+    }
+    
+  }
+  return "NULL";
 }
 
 void OnLanePlanning::ExportReferenceLineDebug(planning_internal::Debug* debug) {

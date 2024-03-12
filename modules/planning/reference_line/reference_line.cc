@@ -795,6 +795,15 @@ std::string ReferenceLine::DebugString() const {
                     apollo::common::util::DebugStringFormatter()));
 }
 
+std::string ReferenceLine::CustomDebugString() const {
+  std::string tmp = absl::StrCat(
+      "point num:", reference_points_.size());
+  for (auto point : reference_points_) {
+    tmp = absl::StrCat(tmp, "{x: ", fmod(point.x(), 100), ", y: ", fmod(point.y(), 100), "}");
+  }
+  return tmp;
+}
+
 double ReferenceLine::GetSpeedLimitFromS(const double s) const {
   for (const auto& speed_limit : speed_limit_) {
     if (s >= speed_limit.start_s && s <= speed_limit.end_s) {

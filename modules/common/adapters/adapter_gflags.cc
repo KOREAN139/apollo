@@ -35,6 +35,8 @@ DEFINE_string(planning_trajectory_topic, "/apollo/planning",
               "planning trajectory topic name");
 DEFINE_string(planning_pad_topic, "/apollo/planning/pad",
               "planning pad topic name");
+DEFINE_string(planning_debug_data_topic, "/apollo/planning_debug",
+              "planning internal data debug topic name");
 DEFINE_string(monitor_topic, "/apollo/monitor", "Monitor");
 DEFINE_string(pad_topic, "/apollo/control/pad",
               "control pad message topic name");

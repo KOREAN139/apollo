@@ -32,6 +32,7 @@ cc_library(
         "//modules/planning/proto:planning_cc_proto",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
         "//modules/storytelling/proto:story_cc_proto",
+        "//modules/planning/proto:planning_debug_cc_proto",
     ],
 )
 
@@ -67,6 +68,7 @@ cc_library(
         "//modules/planning/tasks:task_factory",
         "//modules/planning/traffic_rules:traffic_decider",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
+        "//modules/planning/proto:planning_debug_cc_proto",
     ],
 )
 

@@ -212,6 +212,12 @@ void ReferenceLineProvider::GenerateThread() {
       AERROR << "Fail to get reference line";
       continue;
     }
+    /*
+    ADEBUG << "reference lines debug by dohyun";
+    for (const ReferenceLine& reference_line : reference_lines) {
+      ADEBUG << reference_line.CustomDebugString();
+    }
+    */
     UpdateReferenceLine(reference_lines, segments);
     const double end_time = Clock::NowInSeconds();
     std::lock_guard<std::mutex> lock(reference_lines_mutex_);
@@ -945,5 +951,17 @@ bool ReferenceLineProvider::SmoothReferenceLine(
   }
   return true;
 }
+
+/*
+std::list<std::string> ReferenceLineProvider::GetReferenceLineDebugString() {
+  std::list<std::string> reference_line_debug_string_list;
+  for (const ReferenceLine& reference_line : reference_lines_) {
+          reference_line_debug_string_list.push_back(reference_line.CustomDebugString());
+  }
+
+  return reference_line_debug_string_list;
+}
+*/
+
 }  // namespace planning
 }  // namespace apollo

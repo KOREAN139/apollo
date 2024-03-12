@@ -30,6 +30,7 @@
 #include "modules/planning/proto/learning_data.pb.h"
 #include "modules/planning/proto/pad_msg.pb.h"
 #include "modules/planning/proto/planning.pb.h"
+#include "modules/planning/proto/planning_debug.pb.h"
 #include "modules/planning/proto/planning_config.pb.h"
 #include "modules/prediction/proto/prediction_obstacle.pb.h"
 #include "modules/routing/proto/routing.pb.h"
@@ -71,6 +72,7 @@ class PlanningComponent final
   std::shared_ptr<cyber::Writer<routing::RoutingRequest>> rerouting_writer_;
   std::shared_ptr<cyber::Writer<PlanningLearningData>>
       planning_learning_data_writer_;
+  std::shared_ptr<cyber::Writer<PlanningDebugMessage>> planning_debug_data_writer_;
 
   std::mutex mutex_;
   perception::TrafficLightDetection traffic_light_;

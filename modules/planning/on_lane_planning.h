@@ -23,6 +23,7 @@
 #include "modules/planning/common/smoothers/smoother.h"
 #include "modules/planning/planner/on_lane_planner_dispatcher.h"
 #include "modules/planning/planning_base.h"
+// #include "modules/planning/proto/planning_debug.pb.h"
 
 /**
  * @namespace apollo::planning
@@ -62,6 +63,9 @@ class OnLanePlanning : public PlanningBase {
    */
   void RunOnce(const LocalView& local_view,
                ADCTrajectory* const ptr_trajectory_pb) override;
+
+  // void GetDebugMsg(planning_debug::PlanningDebugMessage* const planning_debug_msg) override;
+  std::string GetDebugMsg() override;
 
   common::Status Plan(
       const double current_time_stamp,

@@ -313,6 +313,11 @@ void NaviPlanning::RunOnce(const LocalView& local_view,
   injector_->frame_history()->Add(seq_num, std::move(frame_));
 }
 
+std::string NaviPlanning::GetDebugMsg() {
+  return "NULL";
+}
+
+
 void NaviPlanning::ProcessPadMsg(DrivingAction drvie_action) {
   if (config_.has_navigation_planning_config()) {
     std::map<std::string, uint32_t> lane_id_to_priority;

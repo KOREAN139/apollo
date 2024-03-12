@@ -39,6 +39,6 @@ export GLOG_minloglevel=0
 export sysmo_start=0
 
 # for DEBUG log
-#export GLOG_v=4
+export GLOG_v=4
 
 source ${CYBER_PATH}/tools/cyber_tools_auto_complete.bash

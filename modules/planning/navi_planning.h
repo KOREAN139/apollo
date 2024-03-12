@@ -66,6 +66,9 @@ class NaviPlanning : public PlanningBase {
   void RunOnce(const LocalView& local_view,
                ADCTrajectory* const trajectory_pb) override;
 
+  // void GetDebugMsg(planning_debug::PlanningDebugMessage* const planning_debug_msg) override;
+  std::string GetDebugMsg() override;
+
   apollo::common::Status Plan(
       const double current_time_stamp,
       const std::vector<common::TrajectoryPoint>& stitching_trajectory,

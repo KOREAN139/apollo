@@ -29,6 +29,7 @@ DECLARE_string(localization_topic);
 DECLARE_string(planning_learning_data_topic);
 DECLARE_string(planning_trajectory_topic);
 DECLARE_string(planning_pad_topic);
+DECLARE_string(planning_debug_data_topic);
 DECLARE_string(monitor_topic);
 DECLARE_string(pad_topic);
 DECLARE_string(control_command_topic);

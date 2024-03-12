@@ -202,6 +202,26 @@ py_proto_library(
     ],
 )
 
+## new proto by dohyun
+cc_proto_library(
+    name = "planning_debug_cc_proto",
+    deps = [
+        ":planning_debug_proto",
+    ],
+)
+
+proto_library(
+    name = "planning_debug_proto",
+    srcs = ["planning_debug.proto"],
+)
+
+py_proto_library(
+    name = "planning_debug_py_pb2",
+    deps = [
+        ":planning_debug_proto",
+    ],
+)
+
 cc_proto_library(
     name = "open_space_task_config_cc_proto",
     deps = [

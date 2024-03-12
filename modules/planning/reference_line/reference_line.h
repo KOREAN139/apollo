@@ -172,6 +172,8 @@ class ReferenceLine {
 
   std::string DebugString() const;
 
+  std::string CustomDebugString() const;
+
   double GetSpeedLimitFromS(const double s) const;
 
   void AddSpeedLimit(double start_s, double end_s, double speed_limit);

@@ -41,6 +41,7 @@ using google::protobuf::util::MessageToJsonString;
 using apollo::hdmap::Map;
 using apollo::perception::TrafficLightDetection;
 using apollo::planning::ADCTrajectory;
+using apollo::planning::PlanningDebugMessage;
 using apollo::planning::PadMessage;
 using apollo::planning::DrivingAction;
 using apollo::prediction::PredictionObstacles;
@@ -68,6 +69,9 @@ void InstrumentationService::InitReaders()
         planning_reader_ =
                 node_->CreateReader<ADCTrajectory>(
                                 FLAGS_planning_trajectory_topic);
+        planning_debug_reader_ =
+                node_->CreateReader<PlanningDebugMessage>(
+                                FLAGS_planning_debug_data_topic);
         pad_msg_writer_ =
                 node_->CreateWriter<PadMessage>(
                                 FLAGS_planning_pad_topic);
@@ -154,6 +158,7 @@ void InstrumentationService::Update()
         UpdateWithLatestObserved(perception_traffic_light_reader_.get());
         UpdateWithLatestObserved(prediction_obstacle_reader_.get());
         UpdateWithLatestObserved(planning_reader_.get());
+        UpdateWithLatestObserved(planning_debug_reader_.get());
 }
 
 apollo::hdmap::Map InstrumentationService::GetMapData()
@@ -200,6 +205,12 @@ template<>
 void InstrumentationService::UpdateData(const ADCTrajectory &trajectory)
 {
         instrumentation_.mutable_trajectory()->CopyFrom(trajectory);
+}
+
+template<>
+void InstrumentationService::UpdateData(const PlanningDebugMessage &planning_debug_msg)
+{
+        instrumentation_.mutable_planning_debug_message()->CopyFrom(planning_debug_msg);
 }
 
 }  // namespace dreamview

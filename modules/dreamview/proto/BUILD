@@ -216,6 +216,7 @@ proto_library(
         "//modules/planning/proto:planning_proto",
         "//modules/perception/proto:traffic_light_detection_proto",
         "//modules/prediction/proto:prediction_obstacle_proto",
+        "//modules/planning/proto:planning_debug_proto",
     ],
 )
 
@@ -226,6 +227,7 @@ py_proto_library(
         "//modules/planning/proto:planning_py_pb2",
         "//modules/perception/proto:traffic_light_detection_py_pb2",
         "//modules/prediction/proto:prediction_obstacle_py_pb2",
+        "//modules/planning/proto:planning_debug_py_pb2",
     ],
 )
 

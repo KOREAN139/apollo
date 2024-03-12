@@ -23,6 +23,7 @@ cc_library(
         "//modules/perception/proto:traffic_light_detection_cc_proto",
         "//modules/planning/proto:planning_cc_proto",
         "//modules/planning/proto:pad_msg_cc_proto",
+        "//modules/planning/proto:planning_debug_cc_proto",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
         "@boost",
         "@com_github_nlohmann_json//:json",

@@ -48,7 +48,7 @@ bool PlanningComponent::Init() {
   }
 
   ACHECK(ComponentBase::GetProtoConfig(&config_))
-      << "failed to load planning config file "
+      << "failed to load planning config file: "
       << ComponentBase::ConfigFilePath();
 
   if (FLAGS_planning_offline_learning ||
@@ -111,6 +111,9 @@ bool PlanningComponent::Init() {
 
   planning_learning_data_writer_ = node_->CreateWriter<PlanningLearningData>(
       config_.topic_config().planning_learning_data_topic());
+
+  planning_debug_data_writer_ = node_->CreateWriter<PlanningDebugMessage>(
+      config_.topic_config().planning_debug_data_topic());
 
   return true;
 }
@@ -186,7 +189,14 @@ bool PlanningComponent::Proc(
   }
 
   ADCTrajectory adc_trajectory_pb;
+  PlanningDebugMessage planning_debug_msg;
   planning_base_->RunOnce(local_view_, &adc_trajectory_pb);
+  if (!FLAGS_use_navigation_mode) {
+    planning_debug_msg.add_reference_lines_string(planning_base_->GetDebugMsg());
+    // planning_base_->GetDebugMsg(&planning_debug_msg);
+    planning_debug_data_writer_->Write(planning_debug_msg);
+  }
+
   common::util::FillHeader(node_->Name(), &adc_trajectory_pb);
 
   // modify trajectory relative time due to the timestamp change in header
