@@ -44,6 +44,7 @@ using apollo::planning::ADCTrajectory;
 using apollo::planning::PlanningDebugMessage;
 using apollo::planning::PadMessage;
 using apollo::planning::DrivingAction;
+using apollo::routing::RoutingResponse;
 using apollo::prediction::PredictionObstacles;
 
 namespace {
@@ -72,6 +73,10 @@ void InstrumentationService::InitReaders()
         planning_debug_reader_ =
                 node_->CreateReader<PlanningDebugMessage>(
                                 FLAGS_planning_debug_data_topic);
+
+        routing_response_reader_ =
+                node_->CreateReader<RoutingResponse>(
+                                FLAGS_routing_response_topic);
         pad_msg_writer_ =
                 node_->CreateWriter<PadMessage>(
                                 FLAGS_planning_pad_topic);
@@ -159,6 +164,7 @@ void InstrumentationService::Update()
         UpdateWithLatestObserved(prediction_obstacle_reader_.get());
         UpdateWithLatestObserved(planning_reader_.get());
         UpdateWithLatestObserved(planning_debug_reader_.get());
+        UpdateWithLatestObserved(routing_response_reader_.get());
 }
 
 apollo::hdmap::Map InstrumentationService::GetMapData()
@@ -205,6 +211,12 @@ template<>
 void InstrumentationService::UpdateData(const ADCTrajectory &trajectory)
 {
         instrumentation_.mutable_trajectory()->CopyFrom(trajectory);
+}
+
+template<>
+void InstrumentationService::UpdateData(const RoutingResponse &routing_response)
+{
+        instrumentation_.mutable_routing_response()->CopyFrom(routing_response);
 }
 
 template<>

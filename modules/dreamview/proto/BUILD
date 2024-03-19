@@ -217,6 +217,7 @@ proto_library(
         "//modules/perception/proto:traffic_light_detection_proto",
         "//modules/prediction/proto:prediction_obstacle_proto",
         "//modules/planning/proto:planning_debug_proto",
+        "//modules/routing/proto:routing_proto",
     ],
 )
 

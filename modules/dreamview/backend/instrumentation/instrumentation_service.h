@@ -86,14 +86,12 @@ class InstrumentationService {
    */
   template <typename MessageT>
   void UpdateWithLatestObserved(cyber::Reader<MessageT> *reader) {
-    ADEBUG << "checked by dohyun.";
     if (reader->Empty()) {
       AINFO << "Has not received any data from "
               << reader->GetChannelName();
       return;
     }
 
-    ADEBUG << "checked by dohyun.";
     const std::shared_ptr<MessageT> msg = reader->GetLatestObserved();
     UpdateData(*msg);
   }
@@ -115,6 +113,9 @@ class InstrumentationService {
       planning_reader_;
   std::shared_ptr<cyber::Reader<apollo::planning::PlanningDebugMessage>>
       planning_debug_reader_;
+  std::shared_ptr<cyber::Reader<apollo::routing::RoutingResponse>>
+      routing_response_reader_;
+
 
   // Writers
   std::shared_ptr<cyber::Writer<apollo::planning::PadMessage>>

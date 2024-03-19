@@ -6,6 +6,7 @@ import "modules/planning/proto/planning.proto";
 import "modules/perception/proto/traffic_light_detection.proto";
 import "modules/prediction/proto/prediction_obstacle.proto";
 import "modules/planning/proto/planning_debug.proto";
+import "modules/routing/proto/routing.proto";
 
 // Next-id: 13
 message Instrumentation {
@@ -22,4 +23,6 @@ message Instrumentation {
   optional apollo.planning.ADCTrajectory trajectory = 5;
 
   optional apollo.planning.PlanningDebugMessage planning_debug_message = 6;
+
+  optional apollo.routing.RoutingResponse routing_response = 7;
 }
