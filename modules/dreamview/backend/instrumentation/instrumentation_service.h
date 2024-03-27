@@ -96,6 +96,8 @@ class InstrumentationService {
     UpdateData(*msg);
   }
 
+  std::string exec(const char* cmd);
+
   std::unique_ptr<cyber::Node> node_;
 
   // Instrumentation data object

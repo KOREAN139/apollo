@@ -86,3 +86,4 @@ debug_output/
 # gcov files
 *.gcda
 *.gcno
+*.gcov

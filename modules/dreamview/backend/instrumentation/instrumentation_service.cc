@@ -154,6 +154,17 @@ void InstrumentationService::RegisterMessageHandlers()
                         pad_msg.set_action(DrivingAction::RESUME_CRUISE);
                         pad_msg_writer_->Write(pad_msg);
                 });
+        instrumentation_ws_->RegisterMessageHandler(
+                "RequestPlanningReset",
+                [this](const Json &json, WebSocketHandler::Connection *conn) {
+                        std::string query_command = "pgrep -a mainboard | grep planning";
+                        std::string process = exec(query_command.c_str());
+                        std::string process_id = process.substr(0, process.find_first_of(" ", 0));
+                        
+                        // kill system task
+                        std::string kill_command = "kill -9 " + process_id;
+                        exec(kill_command.c_str());
+                });
 }
 
 void InstrumentationService::Update()
@@ -223,6 +234,19 @@ template<>
 void InstrumentationService::UpdateData(const PlanningDebugMessage &planning_debug_msg)
 {
         instrumentation_.mutable_planning_debug_message()->CopyFrom(planning_debug_msg);
+}
+
+std::string InstrumentationService::exec(const char* cmd) {
+        FILE* pipe = popen(cmd, "r");
+        if (!pipe) return "ERROR";
+        char buffer[128];
+        std::string result = "";
+        while(!feof(pipe)) {
+                if(fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+        }
+        pclose(pipe);
+        return result;
 }
 
 }  // namespace dreamview
