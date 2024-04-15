@@ -169,6 +169,7 @@ function determine_dev_image() {
         fi
     fi
     DEV_IMAGE="${DOCKER_REPO}:${version}"
+    # DEV_IMAGE="${version}"
 }
 
 function check_host_environment() {

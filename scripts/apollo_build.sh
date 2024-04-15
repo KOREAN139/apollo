@@ -248,6 +248,7 @@ function run_bazel_build() {
   info "${TAB}Disabled:      ${YELLOW}${disabled_targets}${NO_COLOR}"
 
   local job_args="--jobs=$(nproc) --local_ram_resources=HOST_RAM*0.7"
+  # bazel build ${CMDLINE_OPTIONS} ${job_args} -- ${formatted_targets}
   bazel build --cxxopt="-fprofile-arcs" --cxxopt="-ftest-coverage" --linkopt="-lgcov" --linkopt="--coverage" ${CMDLINE_OPTIONS} ${job_args} -- ${formatted_targets}
 }
 

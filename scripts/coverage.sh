@@ -3,13 +3,14 @@
 
 MODULE_PATH="/apollo/modules"
 
-function main() {
-    # parse_cmdline_args "$@"
+function clean_gcov() {
+    find . -name "*gcov" -delete
+    find /apollo/modules/ -name "*gcda" -delete
+}
+
+function move_gcda() {
     gcda_list=$(find /apollo/cyber/bazel-out -name "*gcda")
     gcda_array=($gcda_list)
-
-    gcno_list=$(find /apollo/.cache -name "*gcno")
-    gcno_array=($gcno_list)
 
     for line in "${gcda_array[@]}"
     do
@@ -40,8 +41,16 @@ function main() {
         if [ -d $gcda_path ] && [ $(find $gcda_path -name $source_file | wc -l) > 0 ]
         then
             cp $line $copied_path
+        else
+          echo $line
         fi
     done
+
+}
+
+function move_gcno() {
+    gcno_list=$(find /apollo/.cache -name "*gcno")
+    gcno_array=($gcno_list)
 
     for line in "${gcno_array[@]}"
     do
@@ -74,6 +83,23 @@ function main() {
             cp $line $copied_path
         fi
     done
+}
+
+function run_gcov() {
+    lcov -c -d /apollo/modules/planning/scenarios/ -o coverage.info
+    lcov -r coverage.info "/apollo/external/*" -o coverage_new.info
+    genhtml --output-directory output_directory coverage_new.info
+}
+
+function main() {
+    # parse_cmdline_args "$@"
+
+    clean_gcov
+    
+    move_gcda
+    move_gcno
+
+    run_gcov
 
     return
 }

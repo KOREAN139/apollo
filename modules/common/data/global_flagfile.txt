@@ -36,3 +36,9 @@
 --map_dir=/apollo/modules/map/data/parallelparking
 
 --map_dir=/apollo/modules/map/data/Tartu
+
+--map_dir=/apollo/modules/map/data/SanFrancisco_correct
+
+--map_dir=/apollo/modules/map/data/SanFrancisco_correct_adjusted
+
+--map_dir=/apollo/modules/map/data/SanFrancisco_correct

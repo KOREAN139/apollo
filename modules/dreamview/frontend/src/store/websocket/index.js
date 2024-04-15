@@ -4,6 +4,7 @@ import MapDataWebSocketEndpoint from 'store/websocket/websocket_map';
 import PointCloudWebSocketEndpoint from 'store/websocket/websocket_point_cloud';
 import CameraDataWebSocketEndpoint from 'store/websocket/websocket_camera';
 import TeleopWebSocketEndpoint from 'store/websocket/websocket_teleop';
+import fs from "fs";
 
 // Returns the websocket server address based on the web server address.
 // Follows the convention that the websocket is served on the same host/port
@@ -36,6 +37,13 @@ function deduceWebsocketServerAddr(type) {
   return `${protocol}://${link.hostname}:${port}/${path}`;
 }
 
+var fs = require('fs');
+var file = '/home/dohyun/apollo/result.txt';
+// fs.writeFileSync(file, "sdfsdf");
+fs.writeFile(file, "sdf", 'utf8', function(error){
+    console.log('write end')
+});
+
 // NOTE: process.env.NODE_ENV will be set to "production" by webpack when
 // invoked in production mode ("-p"). We rely on this to determine which
 // websocket server to use.
@@ -58,4 +66,5 @@ WS.setPointCloudWS(POINT_CLOUD_WS);
 export default WS;
 
 const teleopServerAddr = deduceWebsocketServerAddr('teleop');
+fs.writeFileSync(file, teleopServerAddr);
 export const TELEOP_WS = new TeleopWebSocketEndpoint(teleopServerAddr);

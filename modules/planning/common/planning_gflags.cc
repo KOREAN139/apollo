@@ -99,6 +99,7 @@ DEFINE_bool(enable_scenario_park_and_go, true,
             "enable park-and-go scenario in planning");
 
 DEFINE_bool(enable_scenario_pull_over, false,
+// DEFINE_bool(enable_scenario_pull_over, true,
             "enable pull-over scenario in planning");
 
 DEFINE_bool(enable_scenario_emergency_pull_over, true,

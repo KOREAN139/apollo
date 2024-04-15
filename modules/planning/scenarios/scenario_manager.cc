@@ -380,6 +380,7 @@ ScenarioConfig::ScenarioType ScenarioManager::SelectInterceptionScenario(
         overlap.first == ReferenceLineInfo::STOP_SIGN ||
         overlap.first == ReferenceLineInfo::YIELD_SIGN) {
       overlap_type = overlap.first;
+      // ADEBUG << "OVERLAP: " << overlap << " by dohyun";
       traffic_sign_overlap = const_cast<hdmap::PathOverlap*>(&overlap.second);
       break;
     } else if (overlap.first == ReferenceLineInfo::PNC_JUNCTION) {
@@ -913,6 +914,7 @@ ScenarioConfig::ScenarioType ScenarioManager::ScenarioDispatchNonLearning(
   const common::VehicleState& car_position = frame.vehicle_state();
   if (scenario_type == default_scenario_type_) {
     // check current_scenario (not switchable)
+    ADEBUG << "current scenario: " << current_scenario_->scenario_type();
     switch (current_scenario_->scenario_type()) {
       case ScenarioConfig::LANE_FOLLOW:
       case ScenarioConfig::PULL_OVER:
@@ -928,12 +930,14 @@ ScenarioConfig::ScenarioType ScenarioManager::ScenarioDispatchNonLearning(
       case ScenarioConfig::VALET_PARKING:
       case ScenarioConfig::DEADEND_TURNAROUND:
         // transfer dead_end to lane follow, should enhance transfer logic
+        ADEBUG << "target_point: " << target_point.x(), target_point.y(), target_point.z();
         if (JudgeReachTargetPoint(car_position, target_point)) {
           scenario_type = ScenarioConfig::LANE_FOLLOW;
           reach_target_pose_ = true;
         }
       case ScenarioConfig::YIELD_SIGN:
         // must continue until finish
+        ADEBUG << "current scenario done?: " << current_scenario_->GetStatus();
         if (current_scenario_->GetStatus() !=
             Scenario::ScenarioStatus::STATUS_DONE) {
           scenario_type = current_scenario_->scenario_type();
@@ -961,6 +965,7 @@ ScenarioConfig::ScenarioType ScenarioManager::ScenarioDispatchNonLearning(
   // pull-over scenario
   if (scenario_type == default_scenario_type_) {
     if (FLAGS_enable_scenario_pull_over) {
+      ADEBUG << "pull over enabled";
       scenario_type = SelectPullOverScenario(frame);
     }
   }

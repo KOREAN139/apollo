@@ -111,6 +111,7 @@ bool Rerouting::ChangeLaneFailRerouting() {
   }
 
   // store last rerouting time.
+  ADEBUG << "rerouting done";
   rerouting->set_last_rerouting_time(current_time);
   return true;
 }

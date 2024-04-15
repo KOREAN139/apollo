@@ -69,17 +69,22 @@ Stage::StageStatus EmergencyPullOverStageStandby::Process(
     double stop_line_s =
         pull_over_sl.s() + stop_distance +
         VehicleConfigHelper::GetConfig().vehicle_param().front_edge_to_center();
+    ADEBUG << "stop_lne_s: " << stop_line_s;
     const double adc_front_edge_s = reference_line_info.AdcSlBoundary().end_s();
     double distance = stop_line_s - adc_front_edge_s;
-    if (distance <= 0.0) {
+    // add stop distance buffer by dohyun
+    static constexpr double kStopDistanceTolerance = 3.0;
+    ADEBUG << "stop line distance: " << distance;
+    if (distance <= 0.0 - kStopDistanceTolerance) {
       // push stop fence further
+      ADEBUG << "push stop fence";
       stop_line_s = adc_front_edge_s + stop_distance;
     }
 
     const std::string virtual_obstacle_id = "EMERGENCY_PULL_OVER";
     const std::vector<std::string> wait_for_obstacle_ids;
     planning::util::BuildStopDecision(
-        virtual_obstacle_id, stop_line_s, stop_distance,
+        virtual_obstacle_id, stop_line_s, stop_distance + kStopDistanceTolerance,
         StopReasonCode::STOP_REASON_PULL_OVER, wait_for_obstacle_ids,
         "EMERGENCY_PULL_OVER-scenario", frame,
         &(frame->mutable_reference_line_info()->front()));

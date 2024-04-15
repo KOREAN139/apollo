@@ -8,6 +8,7 @@ import AudioControl from 'components/TeleopMonitor/AudioControl';
 import MonitorSection from 'components/TeleopMonitor/MonitorSection';
 
 import itemIcon from 'assets/images/icons/teleop_item.png';
+import fs from 'fs';
 
 function OperationButton(props) {
   const { name, command } = props;
@@ -33,6 +34,7 @@ export default class ConsoleTeleOp extends React.Component {
 
     this.operation = {
       STOP: () => {
+        console.log('teleop stop command')
         TELEOP_WS.executeCommand('EStop');
       },
       'PULL OVER': () => {

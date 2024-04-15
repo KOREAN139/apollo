@@ -391,6 +391,7 @@ std::vector<int> PncMap::GetNeighborPassages(const routing::RoadSegment &road,
   }
 
   for (int i = 0; i < road.passage_size(); ++i) {
+    // Question: start_passage 이후부터 count할거면 조건이 i <= start_passage가 맞지 않나?
     if (i == start_passage) {
       continue;
     }
@@ -404,6 +405,7 @@ std::vector<int> PncMap::GetNeighborPassages(const routing::RoadSegment &road,
   }
   return result;
 }
+
 bool PncMap::GetRouteSegments(const VehicleState &vehicle_state,
                               std::list<RouteSegments> *const route_segments) {
   double look_forward_distance =
@@ -434,6 +436,13 @@ bool PncMap::GetRouteSegments(const VehicleState &vehicle_state,
   const auto &road = routing_.road(road_index);
   // Raw filter to find all neighboring passages
   auto drive_passages = GetNeighborPassages(road, passage_index);
+  // Debug drive_passages by dohyun
+  std::string debug_string = "drive_passages: ";
+  for (auto value : drive_passages) {
+    debug_string = absl::StrCat(debug_string, value, ", ");
+  }
+  ADEBUG << debug_string << "by dohyun";
+  ADEBUG << "waypoint: " << adc_waypoint_.DebugString() << "by dohyun";
   for (const int index : drive_passages) {
     const auto &passage = road.passage(index);
     RouteSegments segments;

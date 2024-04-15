@@ -87,3 +87,8 @@ debug_output/
 *.gcda
 *.gcno
 *.gcov
+
+*.txt
+*.html
+*.info
+*.css

@@ -285,6 +285,13 @@ void ReferenceLineInfo::InitFirstOverlaps() {
                 return a.second.start_s < b.second.start_s;
               });
   }
+
+  if (!first_encounter_overlaps_.empty()) {
+    for (const auto& overlap : first_encounter_overlaps_) {
+            ADEBUG << "dohyun";
+            ADEBUG << "OVERLAP_TYPES: " << overlap.first;
+    }
+  }
 }
 
 bool WithinOverlap(const hdmap::PathOverlap& overlap, double s) {

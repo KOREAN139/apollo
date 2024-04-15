@@ -68,6 +68,7 @@ Stage::StageStatus StopSignUnprotectedStageCreep::Process(
                                                 stop_sign_overlap_id,
                                                 ReferenceLineInfo::STOP_SIGN);
   if (!current_stop_sign_overlap) {
+    ADEBUG << "Finish stop scenario in creep stage: by dohyun";
     return FinishScenario();
   }
 
