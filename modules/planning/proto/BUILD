@@ -213,12 +213,16 @@ cc_proto_library(
 proto_library(
     name = "planning_debug_proto",
     srcs = ["planning_debug.proto"],
+    deps = [
+        "//modules/common/proto:geometry_proto",
+    ],
 )
 
 py_proto_library(
     name = "planning_debug_py_pb2",
     deps = [
         ":planning_debug_proto",
+        "//modules/common/proto:geometry_py_pb2",
     ],
 )
 

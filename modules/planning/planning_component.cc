@@ -190,10 +190,26 @@ bool PlanningComponent::Proc(
 
   ADCTrajectory adc_trajectory_pb;
   PlanningDebugMessage planning_debug_msg;
+  std::list<bool> lane_decision;
   planning_base_->RunOnce(local_view_, &adc_trajectory_pb);
+  planning_base_->GetLaneDecision(lane_decision);
   if (!FLAGS_use_navigation_mode) {
     planning_debug_msg.add_reference_lines_string(planning_base_->GetDebugMsg());
-    // planning_base_->GetDebugMsg(&planning_debug_msg);
+
+    planning_debug_msg.set_lane_borrow_decision(lane_decision.front());
+    planning_debug_msg.set_lane_change_decision(lane_decision.back());
+    // ADEBUG << "Lane borrow decision in message: " << planning_debug_msg.lane_borrow_decision();
+    
+    auto* pull_over_status = injector_->planning_context()
+                               ->mutable_planning_status()
+                               ->mutable_pull_over();
+
+    // If already found a pull-over position, simply check if it's valid.
+    if (pull_over_status->has_position()) {
+      ADEBUG << "pull over position exists";
+      planning_debug_msg.mutable_pull_over_position()->CopyFrom(pull_over_status->position());
+    }
+
     planning_debug_data_writer_->Write(planning_debug_msg);
   }
 

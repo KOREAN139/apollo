@@ -39,7 +39,6 @@
 #include "modules/planning/proto/traffic_rule_config.pb.h"
 #include "modules/prediction/proto/prediction_obstacle.pb.h"
 #include "modules/routing/proto/routing.pb.h"
-// #include "modules/planning/proto/planning_debug.pb.h"
 
 /**
  * @namespace apollo::planning
@@ -69,6 +68,7 @@ class PlanningBase {
 
   // virtual void GetDebugMsg(planning_debug::PlanningDebugMessage* const planning_debug_msg) = 0;
   virtual std::string GetDebugMsg() = 0;
+  virtual void GetLaneDecision(std::list<bool>& lane_decision) = 0;
 
   /**
    * @brief Plan the trajectory given current vehicle state

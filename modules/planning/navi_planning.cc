@@ -317,6 +317,9 @@ std::string NaviPlanning::GetDebugMsg() {
   return "NULL";
 }
 
+void NaviPlanning::GetLaneDecision(std::list<bool>& lane_decision) {
+  return;
+}
 
 void NaviPlanning::ProcessPadMsg(DrivingAction drvie_action) {
   if (config_.has_navigation_planning_config()) {

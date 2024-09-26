@@ -96,6 +96,7 @@ class Frame {
 
   const std::list<ReferenceLineInfo> &reference_line_info() const;
   std::list<ReferenceLineInfo> *mutable_reference_line_info();
+  void reference_line_info_clear();
 
   Obstacle *Find(const std::string &id);
 

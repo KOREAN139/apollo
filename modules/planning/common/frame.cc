@@ -56,7 +56,8 @@ FrameHistory::FrameHistory()
 
 Frame::Frame(uint32_t sequence_num)
     : sequence_num_(sequence_num),
-      monitor_logger_buffer_(common::monitor::MonitorMessageItem::PLANNING) {}
+      monitor_logger_buffer_(common::monitor::MonitorMessageItem::PLANNING) {
+      }
 
 Frame::Frame(uint32_t sequence_num, const LocalView &local_view,
              const common::TrajectoryPoint &planning_start_point,
@@ -67,13 +68,17 @@ Frame::Frame(uint32_t sequence_num, const LocalView &local_view,
       planning_start_point_(planning_start_point),
       vehicle_state_(vehicle_state),
       reference_line_provider_(reference_line_provider),
-      monitor_logger_buffer_(common::monitor::MonitorMessageItem::PLANNING) {}
+      monitor_logger_buffer_(common::monitor::MonitorMessageItem::PLANNING) {
+  reference_line_info_clear();
+      }
 
 Frame::Frame(uint32_t sequence_num, const LocalView &local_view,
              const common::TrajectoryPoint &planning_start_point,
              const common::VehicleState &vehicle_state)
     : Frame(sequence_num, local_view, planning_start_point, vehicle_state,
-            nullptr) {}
+            nullptr) {
+  reference_line_info_clear();
+            }
 
 const common::TrajectoryPoint &Frame::PlanningStartPoint() const {
   return planning_start_point_;
@@ -138,6 +143,10 @@ const std::list<ReferenceLineInfo> &Frame::reference_line_info() const {
 
 std::list<ReferenceLineInfo> *Frame::mutable_reference_line_info() {
   return &reference_line_info_;
+}
+
+void Frame::reference_line_info_clear() {
+  return reference_line_info_.clear();
 }
 
 void Frame::UpdateReferenceLinePriority(

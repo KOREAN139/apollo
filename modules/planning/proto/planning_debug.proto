@@ -2,6 +2,11 @@ syntax = "proto2";
 
 package apollo.planning;
 
+import "modules/common/proto/geometry.proto";
+
 message PlanningDebugMessage {
   repeated string reference_lines_string = 1;
+  optional bool lane_borrow_decision = 2;
+  optional bool lane_change_decision = 3;
+  optional apollo.common.PointENU pull_over_position = 4;
 }

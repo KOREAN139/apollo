@@ -400,8 +400,9 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
     frame_->set_current_frame_planned_trajectory(*ptr_trajectory_pb);
-    const uint32_t n = frame_->SequenceNum();
-    injector_->frame_history()->Add(n, std::move(frame_));
+    frame_->reference_line_info_clear();
+    // const uint32_t n = frame_->SequenceNum();
+    // injector_->frame_history()->Add(n, std::move(frame_));
     return;
   }
 
@@ -482,22 +483,11 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     reference_line_provider_->Start();
     wait_flag_ = true;
   }*/
-  const uint32_t n = frame_->SequenceNum();
-  injector_->frame_history()->Add(n, std::move(frame_));
+
+  // const uint32_t n = frame_->SequenceNum();
+  // injector_->frame_history()->Add(n, std::move(frame_));
 }
 
-/*
-void OnLanePlanning::GetDebugMsg(PlanningDebugMessage* const planning_debug_msg) {
-  std::list<ReferenceLine> reference_lines;
-  std::list<hdmap::RouteSegments> segments;
-  if (reference_line_provider_->GetReferenceLines(&reference_lines,
-                                                   &segments)) {
-    for (auto& ref_line : reference_lines) {
-      planning_debug_msg->add_reference_lines_string(ref_line.CustomDebugString());
-    }
-  }
-}
-*/
 std::string OnLanePlanning::GetDebugMsg() {
   std::list<ReferenceLine> reference_lines;
   std::list<hdmap::RouteSegments> segments;
@@ -506,9 +496,21 @@ std::string OnLanePlanning::GetDebugMsg() {
     if (!reference_lines.empty()) {
       return reference_lines.front().CustomDebugString();
     }
-    
   }
   return "NULL";
+}
+
+void OnLanePlanning::GetLaneDecision(std::list<bool>& lane_decision) {
+  lane_decision.clear();
+  std::list<ReferenceLine> reference_lines;
+  std::list<hdmap::RouteSegments> segments;
+
+  lane_decision.push_back(frame_->reference_line_info().front().is_path_lane_borrow());
+  lane_decision.push_back(frame_->reference_line_info().front().IsChangeLanePath());
+
+  const uint32_t n = frame_->SequenceNum();
+  injector_->frame_history()->Add(n, std::move(frame_));
+  return;
 }
 
 void OnLanePlanning::ExportReferenceLineDebug(planning_internal::Debug* debug) {

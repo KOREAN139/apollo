@@ -66,6 +66,7 @@ class OnLanePlanning : public PlanningBase {
 
   // void GetDebugMsg(planning_debug::PlanningDebugMessage* const planning_debug_msg) override;
   std::string GetDebugMsg() override;
+  void GetLaneDecision(std::list<bool>& lane_decision) override;
 
   common::Status Plan(
       const double current_time_stamp,
